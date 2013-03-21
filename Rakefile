@@ -96,7 +96,7 @@ MESSAGE
   end
 
   task :all => [:db_prepare, :set_loadpath] do
-    Dir.glob('test/**/*_test.rb') { |f| require f unless f.include? '/foreman_app/' }
+    Dir.glob('test/**/*_test.rb') { |f| require f.sub('test/','')  unless f.include? '/foreman_app/' }
   end
 
 end
