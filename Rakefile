@@ -48,7 +48,7 @@ namespace :test do
         puts 'Preparing bundler configuration'
         File.open(bundle_file, 'w') { |f| f << <<FILE }
 ---
-BUNDLE_WITHOUT: postgresql:mysql:mysql2:vmware
+BUNDLE_WITHOUT: console:development:fog:jsonp:libvirt:mysql:mysql2:ovirt:postgresql:vmware
 FILE
       end
     end
@@ -96,7 +96,7 @@ MESSAGE
   end
 
   task :all => [:db_prepare, :set_loadpath] do
-    Dir.glob('test/**/*_test.rb') { |f| require f unless f.include? '/foreman_app/' }
+    Dir.glob('test/**/*_test.rb') { |f| require f.sub('test/','')  unless f.include? '/foreman_app/' }
   end
 
 end

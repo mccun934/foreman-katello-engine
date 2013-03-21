@@ -1,5 +1,6 @@
 Foreman Katello Rails Engine
 ============================
+[![Build Status](https://travis-ci.org/Katello/foreman-katello-engine.png?branch=master)](https://travis-ci.org/Katello/foreman-katello-engine)
 
 Bringing Katello specific code into Foreman.
 
@@ -70,6 +71,29 @@ and reference it from the kickstart template:
 ```
 <%= snippets "katello" %>
 ```
+
+Testing
+-------
+
+Since this is a Rails engine, it needs a host app to test the
+functionality properly. Therefore to run the tests, you need to get
+the source for the Foreman, as well as setting the development
+environment.
+
+The easiest way to do it is running this rake task:
+
+    rake test:foreman_prepare
+
+This downloads the latest Foreman develop code, as well as installs
+required dependencies.
+
+To run the whole suite use:
+
+    rake test
+
+To execute a single test file run:
+
+    ruby -Itest:lib path/to/your_test.rb
 
 Licence
 -------
