@@ -11,6 +11,6 @@ Gem::Specification.new do |s|
   s.licenses = ["GPL-2"]
   s.require_paths = ["lib"]
   s.add_dependency "katello_api"
-  s.add_dependency "deface"
+  s.add_dependency "deface", "~> 0.7.2"
   s.summary = "Katello specific parts of Foreman"
 end

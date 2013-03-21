@@ -12,6 +12,7 @@ Foreman source code is not present. To get the latest version, run:
 and try again.
 MESSAGE
 
+else
   self.instance_eval(Bundler.read_file(FOREMAN_GEMFILE))
 end
 

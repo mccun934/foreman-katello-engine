@@ -42,14 +42,15 @@ namespace :test do
       FileUtils.copy("#{db_file}.example", db_file)
     end
 
-    bundle_file = "#{ENGINE_DIR}/.bundle/config"
-    unless File.exists?(bundle_file)
-      FileUtils.mkdir_p(File.dirname(bundle_file))
-      puts 'Preparing bundler configuration'
-      File.open(bundle_file, 'w') { |f| f << <<FILE }
+    ["#{ENGINE_DIR}/.bundle/config", "#{FOREMAN_DIR}/.bundle/config"].each do |bundle_file|
+      unless File.exists?(bundle_file)
+        FileUtils.mkdir_p(File.dirname(bundle_file))
+        puts 'Preparing bundler configuration'
+        File.open(bundle_file, 'w') { |f| f << <<FILE }
 ---
 BUNDLE_WITHOUT: postgresql:mysql:mysql2:vmware
 FILE
+      end
     end
 
     local_gemfile = "#{FOREMAN_DIR}/bundler.d/Gemfile.local.rb"
