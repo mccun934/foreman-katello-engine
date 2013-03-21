@@ -29,7 +29,7 @@ module ForemanKatelloEngine
         if environment = environments.first
           activation_keys, _ = self.activation_key.index('environment_id' => environment['id'])
           return activation_keys.reduce({}) do |h, ak|
-            h.update(ak['name'] => ak['pools'].map { |pool| pool['subscription']['productName'] })
+            h.update(ak['name'] => ak['pools'].map { |pool| pool['productName'] })
           end
         else
           return nil
