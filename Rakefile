@@ -5,7 +5,7 @@ require 'fileutils'
 namespace :test do
   desc "Download latest foreman devel source and install dependencies"
   task :foreman_prepare do
-    foreman_repo = 'git@github.com:theforeman/foreman.git'
+    foreman_repo = 'https://github.com/theforeman/foreman.git'
     foreman_gemfile = File.join(FOREMAN_DIR, "Gemfile")
     unless File.exists?(foreman_gemfile)
       puts "Foreman source code is not present at #{FOREMAN_DIR}"
