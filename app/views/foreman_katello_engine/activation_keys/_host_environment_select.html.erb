@@ -1,0 +1,13 @@
+<style>
+  option.kt-env { margin-left: 0em; }
+  option.kt-cv  { margin-left: 1em; }
+</style>
+
+<%= field(f, :environment_id, {:include_blank => true}) do
+    f.select :environment_id,
+             grouped_env_options,
+             {:include_blank =>true},
+             {:onchange => 'update_puppetclasses(this);',
+              :"data-url" => environment_selected_hostgroups_path,
+              :'data-host-id' => (@host && @host.id)}
+end %>

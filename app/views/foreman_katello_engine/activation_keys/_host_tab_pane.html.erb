@@ -5,10 +5,17 @@ $(function() {
     var availableActivationKeys = {};
 
     function ktLoadActivationKeys() {
+        if(ktSelectedOrgEnvCv()[0]) {
+            ktAkTab().show();
+        } else {
+            ktAkTab().hide();
+            return; //no Katello-specific env selected
+        }
+
         $("#ak-subscriptions-info").hide();
         $("#ak-subscriptions-spinner").show();
-        var url = foreman_url('/activation_keys');
-        var environmentId = $("#kt_environment_id").val();
+        var url = foreman_url('/foreman_katello_engine/activation_keys');
+        var environmentId = $("#hostgroup_environment_id").val();
         if(environmentId) {
             $.ajax({
                 type: 'get',
@@ -43,8 +50,8 @@ $(function() {
     }
 
     function ktOrganizations() {
-        return $.grep($("#organizations label.organization"), function (el) {
-            return $(el).text().trim().match(/^kt-/)
+        return $.grep($("#organizations #hostgroup_organization_ids option"), function (el) {
+            return $(el).text().trim().match(/^KT-/)
         });
     }
 
@@ -63,54 +70,27 @@ $(function() {
         });
     }
 
-    function ktOrganizationsToKtEnv() {
-        var ktOrgs = [], ktOrgsToEnvs = [], selectedEnvId;
-        var ktEnvironmentSelect = $("#kt_environment_id");
-        $.each(ktOrganizations(), function (i, label) {
-            var input = $(label).find("input[ type = 'checkbox' ]");
-            var frOrgName = $(label).text().trim();
-            var frOrgId = input.val();
-            var match = ktParseOrgName(frOrgName);
-            if(match) {
-                if(input.attr('checked')) {
-                    selectedEnvId = frOrgId;
-                }
-                var ktOrg = match[1]; ktEnv = match[2];
-                if(ktOrgs.indexOf(ktOrg) == -1) {
-                    ktOrgs.push(ktOrg);
-                    ktOrgsToEnvs[ktOrg] = [];
-                }
-                ktOrgsToEnvs[ktOrg].push([frOrgId, ktEnv]);
-            }
-            $(this).parent().hide();
-        });
+    function ktSelectedOrgEnvCv() {
+        var selectedEnvId = $("#hostgroup_environment_id").val();
+        var selectedOption = $("#hostgroup_environment_id option[ value ='" + selectedEnvId + "' ]");
 
-        ktEnvironmentSelect.empty();
-        var content = '<option value=""></option>';
-        $.each(ktOrgs, function (i, org) {
-            content += '<optgroup label="' + org + '">';
-            $.each(ktOrgsToEnvs[org], function (j, env) {
-                // we don't quotre the value beacuse of deface bug
-                content += '<option value=';
-                content += env[0];
-
-                if(env[0] == selectedEnvId) {
-                    content += " selected";
-                }
-                content += '>' + env[1] + '</option>';
-            });
-            content += '</optgroup>';
-        });
-        ktEnvironmentSelect.append(content);
-
-    }
-
-    function ktSelectedOrgAndEnv() {
-        var selectedEnvId = $("#kt_environment_id").val();
-        var orgCheckbox = $("#organizations label.organization input[ type = 'checkbox' ][ value = '" + selectedEnvId + "' ]");
-        if(orgCheckbox) {
-            return ktParseOrgName(orgCheckbox.parent().text().trim());
+        var ktEnvOption, ktCvOption, ktOrgLabel, ktEnvLabel, ktCvLabel;
+        if(selectedOption.hasClass('kt-cv')) {
+            ktCvOption = selectedOption;
+            ktEnvOption = ktCvOption.prevAll('option.kt-env').first();
+        } else if(selectedOption.hasClass('kt-env')) {
+            ktEnvOption = selectedOption;
         }
+
+        if(ktEnvOption) {
+            ktEnvLabel = ktEnvOption.text();
+            ktOrgLabel = ktEnvOption.parent().attr('label');
+        }
+
+        if(ktCvOption) {
+            ktCvLabel = ktCvOption.text();
+        }
+        return [ktOrgLabel, ktEnvLabel, ktCvLabel];
     }
 
     function ktSetParam(name, value) {
@@ -130,19 +110,25 @@ $(function() {
     }
 
     function ktEnvToParam() {
-        var orgAndEnv = ktSelectedOrgAndEnv() || [];
-        ktSetParam('kt_org', orgAndEnv[1]);
-        ktSetParam('kt_env', orgAndEnv[2]);
+        var orgEnvCv = ktSelectedOrgEnvCv() || [];
+        ktSetParam('kt_org', orgEnvCv[0]);
+        ktSetParam('kt_env', orgEnvCv[1]);
+        ktSetParam('kt_cv',  orgEnvCv[2]);
     }
 
     function ktEnvToFrOrganizations() {
-        var selectedEnvId = $("#kt_environment_id").val();
-        $.each(ktOrganizations(), function (i, label) {
-            var input = $(label).find("input[ type = 'checkbox' ]");
-            if(selectedEnvId == input.val()) {
-                input.prop("checked", true);
+        var orgEnvCv = ktSelectedOrgEnvCv() || [];
+
+        var orgName = "";
+        if(orgEnvCv[0]) {
+            orgName = 'KT-[' + orgEnvCv[0] + ']';
+        }
+
+        $.each(ktOrganizations(), function (i, option) {
+            if(orgName == $(option).text().trim()) {
+                $("#hostgroup_organization_ids").multiSelect('select', $(option).val());
             } else {
-                input.prop("checked", false);
+                $("#hostgroup_organization_ids").multiSelect('deselect', $(option).val());
             }
         });
     }
@@ -181,10 +167,13 @@ $(function() {
         $("#ak-subscriptions-spinner").hide();
     }
 
+    function ktAkTab() {
+        return $('li#activation_keys_tab');
+    }
+
     function ktOnLoad() {
         ktHideParams();
         ktParamToAkInput();
-        ktOrganizationsToKtEnv();
         ktLoadActivationKeys();
     };
 
@@ -232,7 +221,7 @@ $(function() {
 	    $(this).autocomplete( "search" );
         }});
 
-    $("#kt_environment_id").change(ktLoadActivationKeys);
+    $("#hostgroup_environment_id").change(ktLoadActivationKeys);
 
     $("#ak_refresh_subscriptions").click(function () {
         ktLoadActivationKeys();
@@ -242,10 +231,7 @@ $(function() {
 });
 
 <% end %>
-<div class="tab-pane" id="katello">
-  <%= field(nil, "Katello Environment", :help_inline => "the names of Katello organization and environment will be available in templates as @host.params['kt_org'] and @host.params['kt_env']") do
-    select_tag(:kt_environment_id, [])
-  end %>
+<div class="tab-pane" id="activation_keys">
   <%= field(nil, "Activation Keys", :help_inline => "comma separated values. The value will be available in templates as @host.params['#{kt_ak_label}']") do
     text_field_tag("kt_activation_keys", "", :style => 'width: 98%')
   end %>
