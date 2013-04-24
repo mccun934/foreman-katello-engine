@@ -7,7 +7,7 @@ class AddKatelloTemplates < ActiveRecord::Migration
     
     ConfigTemplate.where(:name => "Subscription Manager Registration").first_or_create!(
       :snippet  => true,
-      :template => File.read("#{ForemanKatelloEngine::Engine.root}/app/views/unattended/snippets/_katello_registrayion.erb"))
+      :template => File.read("#{ForemanKatelloEngine::Engine.root}/app/views/unattended/snippets/_katello_registration.erb"))
   rescue Exception => e
     # something bad happened, but we don't want to break the migration process
     Rails.logger.warn "Failed to migrate #{e}"
