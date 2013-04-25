@@ -1,9 +1,8 @@
+<% if @host.params['kt_org'] and @host.params['kt_activation_keys'] %>
 # add subscription manager
 yum -t -y -e 0 install subscription-manager
-#yum -y install http://<%= katello_host %>/pub/candlepin-cert-consumer-katello-a.appliedlogic.ca-1.0-1.noarch.rpm
 yum -y install <%= subscription_manager_configuration_url %>
 
-<% if @host.params['kt_org'] and @host.params['kt_activation_keys'] %>
 echo "Registering the System"
 subscription-manager register --org=<%= @host.params['kt_org']%> --name=<%= @host.name %> --activationkey=<%= @host.params['kt_activation_keys'] %>
 <% end %>
