@@ -7,10 +7,9 @@ module ForemanKatelloEngine
     end
 
     config.after_initialize do
+      Setting::Katello.load_defaults
       require 'foreman_katello_engine/bindings'
-      require 'foreman_katello_engine/settings'
       require 'foreman_katello_engine/renderer'
-      ForemanKatelloEngine::Settings.initialize_settings
     end
 
     initializer 'foreman_katello_engine.helper' do |app|

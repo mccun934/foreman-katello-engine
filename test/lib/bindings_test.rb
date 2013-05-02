@@ -4,14 +4,14 @@ require 'mocha/setup'
 class BindingsTest < ActiveSupport::TestCase
 
   def setup
-    Foreman::DefaultSettings::Loader.load
-    ForemanKatelloEngine::Settings.initialize_settings
+    Setting::Auth.load_defaults
+    Setting::Katello.load_defaults
   end
 
   test 'client lib setting' do
-    Setting['katello_url'] = 'https://example.com/katello'
-    Setting['oauth_consumer_key'] = 'key'
-    Setting['oauth_consumer_secret'] = 'secret'
+    Setting::Katello['katello_url'] = 'https://example.com/katello'
+    Setting::Auth['oauth_consumer_key'] = 'key'
+    Setting::Auth['oauth_consumer_secret'] = 'secret'
     config = ForemanKatelloEngine::Bindings.environment.config
     assert_equal 'https://example.com/katello', config[:base_url]
     assert_equal 'key', config[:oauth][:consumer_key]
