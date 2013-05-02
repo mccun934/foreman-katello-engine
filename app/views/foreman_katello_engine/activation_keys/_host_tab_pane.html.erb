@@ -232,7 +232,7 @@ $(function() {
 
 <% end %>
 <div class="tab-pane" id="activation_keys">
-  <%= field(nil, "Activation Keys", :help_inline => "comma separated values. The value will be available in templates as @host.params['#{kt_ak_label}']") do
+  <%= field(f, "Activation Keys", :help_inline => "comma separated values. The value will be available in templates as @host.params['#{kt_ak_label}']") do
     text_field_tag("kt_activation_keys", "", :style => 'width: 98%')
   end %>
   <div class="alert alert-info">
