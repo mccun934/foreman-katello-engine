@@ -2,12 +2,9 @@ require 'test_helper'
 
 class SettingsTest < ActiveSupport::TestCase
 
-  def setup
-    #Setting.where(:name => 'katello_url').delete_all
+  test "katello specific settings" do
+    Setting::Katello.load_defaults
+    assert_equal 'https://localhost/katello', Setting::Katello['katello_url']
   end
 
-  test "katello specific settings" do
-    ForemanKatelloEngine::Settings.initialize_settings
-    assert_equal 'https://localhost/katello', Setting['katello_url']
-  end
 end
