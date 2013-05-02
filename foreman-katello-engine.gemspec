@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email = "katello-devel@redhat.com"
   s.files = `git ls-files`.split("\n")
   s.homepage = "http://github.com/katello/foreman-katello-engine"
-  s.licenses = ["GPL-2"]
+  s.licenses = ["GPL-3"]
   s.require_paths = ["lib"]
   s.add_dependency "katello_api"
   s.add_dependency "deface", "~> 0.7.2"
