@@ -1,8 +1,7 @@
 class Setting::Katello < ::Setting
 
   def self.load_defaults
-    # if db is not migrated, BLANK_ATTRS are not loaded
-    return unless defined? BLANK_ATTRS
+    return unless (self.table_exists? rescue false)
     BLANK_ATTRS << "katello_url"
     Setting.transaction do
       [
