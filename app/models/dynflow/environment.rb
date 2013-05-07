@@ -17,6 +17,7 @@ module Dynflow
         ::Environment.create! do |env|
           env.name = generate_name(org_label, env_label, cv_label, cv_id)
           env.kt_id = kt_id
+          yield env if block_given?
         end
       end
     end

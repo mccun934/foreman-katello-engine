@@ -17,6 +17,12 @@ module ForemanKatelloEngine
         end
       end
 
+      let :organization do
+        Organization.create! do |org|
+          org.name  = 'ACME'
+        end
+      end
+
       describe "#show" do
 
         it "show an environment based on Katello org, env and CV label" do
@@ -40,6 +46,23 @@ module ForemanKatelloEngine
           env = Environment.find(response_env["id"])
           env.name.must_equal "KT_ACME_Dev_env"
           env.kt_id.must_equal "ACME/Dev"
+        end
+
+        it "assigns the environment to org when org_id provided" do
+          # id => show means id is not really used
+          create_params = {
+            :org => 'ACME',
+            :env => 'Dev',
+            :cv_id => 'env',
+            :org_id => organization.id
+          }
+          post :create, create_params, set_session_user
+          assert_response :success
+          response_env = JSON.parse(response.body)["environment"]
+          env = Environment.find(response_env["id"])
+          env.name.must_equal "KT_ACME_Dev_env"
+          env.kt_id.must_equal "ACME/Dev"
+          env.organizations.must_include organization
         end
 
         it "creates an environment based on Katello org, env and CV label" do

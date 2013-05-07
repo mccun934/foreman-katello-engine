@@ -13,10 +13,13 @@ module ForemanKatelloEngine
 
       def create
         begin
+          organization = Organization.find(params[:org_id]) if params[:org_id].present?
           @environment = Dynflow::Environment.create!(params[:org],
                                                       params[:env],
                                                       params[:cv],
-                                                      params[:cv_id])
+                                                      params[:cv_id]) do |env|
+            env.organizations << organization if organization
+          end
         rescue Dynflow::Environment::Conflict => e
           render_error 'standard_error', :status => 409, :locals => { :exception => e }
           return
