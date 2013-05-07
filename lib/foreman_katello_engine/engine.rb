@@ -7,7 +7,9 @@ module ForemanKatelloEngine
     end
 
     config.after_initialize do
-      Setting::Katello.load_defaults
+      if (Setting::Katello.table_exists? rescue false)
+        Setting::Katello.load_defaults
+      end
       require 'foreman_katello_engine/bindings'
       require 'foreman_katello_engine/renderer'
     end
