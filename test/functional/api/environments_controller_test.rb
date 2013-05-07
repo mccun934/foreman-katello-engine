@@ -11,9 +11,9 @@ module ForemanKatelloEngine
       end
 
       let :environment do
-        Environment.create! do |env|
+        ::Environment.create! do |env|
           env.name  = 'DevEnv'
-          env.kt_id = 'ACME/Dev/CV1'
+          env.katello_id = 'ACME/Dev/CV1'
         end
       end
 
@@ -27,7 +27,7 @@ module ForemanKatelloEngine
 
         it "show an environment based on Katello org, env and CV label" do
           # id => show means id is not really used
-          get :show, { :id => "show", :org => 'ACME', :env => 'Dev', :cv => 'CV1' }, set_session_user
+          get :show, { :id => "show", :org => 'ACME', :env => 'Dev', :content_view => 'CV1' }, set_session_user
           assert_response :success
           response_env = JSON.parse(response.body)["environment"]
           response_env["id"].must_equal environment.id
@@ -40,12 +40,12 @@ module ForemanKatelloEngine
 
         it "creates an environment based on Katello org and env" do
           # id => show means id is not really used
-          post :create, { :org => 'ACME', :env => 'Dev', :cv_id => 'env'}, set_session_user
+          post :create, { :org => 'ACME', :env => 'Dev', :content_view_id => 'env'}, set_session_user
           assert_response :success
           response_env = JSON.parse(response.body)["environment"]
-          env = Environment.find(response_env["id"])
+          env = ::Environment.find(response_env["id"])
           env.name.must_equal "KT_ACME_Dev_env"
-          env.kt_id.must_equal "ACME/Dev"
+          env.katello_id.must_equal "ACME/Dev"
         end
 
         it "assigns the environment to org when org_id provided" do
@@ -53,25 +53,25 @@ module ForemanKatelloEngine
           create_params = {
             :org => 'ACME',
             :env => 'Dev',
-            :cv_id => 'env',
+            :content_view_id => 'env',
             :org_id => organization.id
           }
           post :create, create_params, set_session_user
           assert_response :success
           response_env = JSON.parse(response.body)["environment"]
-          env = Environment.find(response_env["id"])
+          env = ::Environment.find(response_env["id"])
           env.name.must_equal "KT_ACME_Dev_env"
-          env.kt_id.must_equal "ACME/Dev"
+          env.katello_id.must_equal "ACME/Dev"
           env.organizations.must_include organization
         end
 
         it "creates an environment based on Katello org, env and CV label" do
-          post :create, { :org => 'ACME', :env => 'Dev', :cv => 'CV2', :cv_id => 2 }, set_session_user
+          post :create, { :org => 'ACME', :env => 'Dev', :content_view => 'CV2', :content_view_id => 2 }, set_session_user
           assert_response :success
           response_env = JSON.parse(response.body)["environment"]
-          env = Environment.find(response_env["id"])
+          env = ::Environment.find(response_env["id"])
           env.name.must_equal "KT_ACME_Dev_CV2_2"
-          env.kt_id.must_equal "ACME/Dev/CV2"
+          env.katello_id.must_equal "ACME/Dev/CV2"
         end
 
         it "requires env to be set" do
@@ -85,7 +85,7 @@ module ForemanKatelloEngine
         end
 
         it "refused to create the same env twice" do
-          post :create, { :org => 'ACME', :env => 'Dev', :cv => 'CV1', :cv_id => 2 }, set_session_user
+          post :create, { :org => 'ACME', :env => 'Dev', :content_view => 'CV1', :content_view_id => 2 }, set_session_user
           assert_response 409
         end
 

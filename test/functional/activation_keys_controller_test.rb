@@ -9,9 +9,9 @@ module ForemanKatelloEngine
     end
 
     let :environment do
-      Environment.create! do |env|
+      ::Environment.create! do |env|
         env.name  = 'DevEnv'
-        env.kt_id = 'ACME/Dev/CV1'
+        env.katello_id = 'ACME/Dev/CV1'
       end
     end
 

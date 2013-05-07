@@ -28,13 +28,13 @@ module ForemanKatelloEngine
         KatelloApi::Resources::ActivationKey.new(client_config)
       end
 
-      def activation_keys_to_subscriptions(org_label, env_label, cv_label = nil)
+      def activation_keys_to_subscriptions(org_label, env_label, content_view_label = nil)
         ak_query = {}
-        if cv_label
-          cvs, _ = self.content_view.index('organization_id' => org_label,
-                                            'label' => cv_label)
-          if cv = cvs.first
-            ak_query['content_view_id'] = cv['id']
+        if content_view_label
+          content_views, _ = self.content_view.index('organization_id' => org_label,
+                                                     'label' => content_view_label)
+          if content_view = content_views.first
+            ak_query['content_view_id'] = content_view['id']
           end
         end
         environments, _ = self.environment.index('organization_id' => org_label, 'name' => env_label)

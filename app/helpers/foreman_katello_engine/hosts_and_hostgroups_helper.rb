@@ -16,21 +16,21 @@ module ForemanKatelloEngine
     end
 
     def envs_by_kt_org
-      Environment.all.find_all(&:kt_id).group_by do |env|
-        if env.kt_id
-          env.kt_id.split('/').first
+      ::Environment.all.find_all(&:katello_id).group_by do |env|
+        if env.katello_id
+          env.katello_id.split('/').first
         end
       end
     end
 
     def envs_by_kt_env(envs)
       envs.group_by do |env|
-        env.kt_id.split('/')[1]
+        env.katello_id.split('/')[1]
       end
     end
 
     def envs_without_kt_org
-      envs_without_kt_org = Environment.all.reject(&:kt_id)
+      envs_without_kt_org = ::Environment.all.reject(&:katello_id)
     end
 
     def envs_without_kt_org_options
@@ -47,9 +47,9 @@ module ForemanKatelloEngine
       grouped_options = envs_by_org.sort_by(&:first).map do |org, envs_by_env|
         optgroup = %[<optgroup label="#{org}">]
         opts = envs_by_env.sort_by(&:first).map do |kt_env, envs|
-          envs.sort_by(&:kt_id).map do |env|
+          envs.sort_by(&:katello_id).map do |env|
             selected = env.id == (@host || @hostgroup).environment_id ? "selected" : ""
-            if cv = env.kt_id.split('/')[2]
+            if cv = env.katello_id.split('/')[2]
               %[<option value="#{env.id}" class="kt-cv" #{selected}>#{cv}</option>]
             else
               %[<option value="#{env.id}" class="kt-env" #{selected}>#{kt_env}</option>]

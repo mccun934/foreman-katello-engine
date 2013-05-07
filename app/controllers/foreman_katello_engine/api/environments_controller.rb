@@ -3,7 +3,7 @@ module ForemanKatelloEngine
     class EnvironmentsController < ::Api::V2::BaseController
 
       def show
-        @environment = Dynflow::Environment.find(params[:org], params[:env], params[:cv])
+        @environment = ForemanKatelloEngine::Environment.find(params[:org], params[:env], params[:content_view])
         if @environment
           render :template => "api/v1/environments/show"
         else
@@ -14,13 +14,13 @@ module ForemanKatelloEngine
       def create
         begin
           organization = Organization.find(params[:org_id]) if params[:org_id].present?
-          @environment = Dynflow::Environment.create!(params[:org],
-                                                      params[:env],
-                                                      params[:cv],
-                                                      params[:cv_id]) do |env|
+          @environment = ForemanKatelloEngine::Environment.create!(params[:org],
+                                                                   params[:env],
+                                                                   params[:content_view],
+                                                                   params[:content_view_id]) do |env|
             env.organizations << organization if organization
           end
-        rescue Dynflow::Environment::Conflict => e
+        rescue ForemanKatelloEngine::Environment::Conflict => e
           render_error 'standard_error', :status => 409, :locals => { :exception => e }
           return
         rescue ArgumentError => e
