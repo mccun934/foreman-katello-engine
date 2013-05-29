@@ -8,7 +8,7 @@
 
 Summary: Katello specific parts of Foreman
 Name: %{?scl_prefix}rubygem-%{gem_name}
-Version: 0.0.7
+Version: 0.0.8
 Release: 1%{?dist}
 Group: Development/Libraries
 License: GPLv2
@@ -82,6 +82,9 @@ GEMFILE
 %{gem_instdir}/%{gem_name}.gemspec
 
 %changelog
+* Wed May 29 2013 Mike McCune <mmccune@redhat.com> 0.0.8-1
+- importing specfile from katello-thirdparty
+
 * Thu May 09 2013 Ivan Necas <inecas@redhat.com> 0.0.7-1
 - Add cross-link to Katello (inecas@redhat.com)
 
