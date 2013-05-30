@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.description = "Katello specific parts of Foreman"
   s.email = "katello-devel@redhat.com"
   s.files = %w(foreman-katello-engine.gemspec Gemfile LICENSE Rakefile README.md)
-  s.files += Dir["app/**/*.rb"]
+  s.files += Dir["app/**/*"]
   s.files += Dir["config/**/*.rb"]
   s.files += Dir["db/**/*.rb"]
   s.files += Dir["lib/**/*.rb"]
