@@ -8,7 +8,7 @@
 
 Summary: Katello specific parts of Foreman
 Name: %{?scl_prefix}rubygem-%{gem_name}
-Version: 0.0.8
+Version: 0.0.7
 Release: 1%{?dist}
 Group: Development/Libraries
 License: GPLv2
