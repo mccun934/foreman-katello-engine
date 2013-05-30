@@ -63,15 +63,12 @@ GEMFILE
 %{gem_instdir}/lib
 %{gem_instdir}/config
 %{gem_instdir}/db
-%{gem_instdir}/script
 %exclude %{gem_cache}
 %{gem_spec}
 %{foreman_bundlerd_dir}/katello.rb
 %doc %{gem_instdir}/LICENSE
 
-%exclude %{gem_instdir}/.gitignore
 %exclude %{gem_instdir}/test
-%exclude %{gem_instdir}/.travis.yml
 %exclude %{gem_dir}/cache/%{gem_name}-%{version}.gem
 
 %files doc

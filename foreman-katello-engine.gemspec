@@ -6,7 +6,14 @@ Gem::Specification.new do |s|
   s.date = "2013-03-04"
   s.description = "Katello specific parts of Foreman"
   s.email = "katello-devel@redhat.com"
-  s.files = `git ls-files`.split("\n")
+  s.files = %w(foreman-katello-engine.gemspec Gemfile LICENSE Rakefile README.md)
+  s.files += Dir["app/**/*.rb"]
+  s.files += Dir["config/**/*.rb"]
+  s.files += Dir["db/**/*.rb"]
+  s.files += Dir["lib/**/*.rb"]
+  s.files += Dir["test/test_helper.rb"]
+  s.files += Dir["test/lib/**/*.rb"]
+  s.files += Dir["test/functional/**/*.rb"]
   s.homepage = "http://github.com/katello/foreman-katello-engine"
   s.licenses = ["GPL-3"]
   s.require_paths = ["lib"]
