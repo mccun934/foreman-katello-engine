@@ -67,8 +67,8 @@ function release() {
     # Publish phase
     GEM_FILE=$(gem build *.gemspec | grep -io '[a-z0-9.-]*\.gem$')
     git push origin HEAD && git push origin --tags
-    gem push $GEM_FILE
     tito release koji
+    gem push $GEM_FILE
 }
 
 ACTION=$1
