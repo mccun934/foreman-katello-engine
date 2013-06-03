@@ -8,7 +8,7 @@
 
 Summary: Katello specific parts of Foreman
 Name: %{?scl_prefix}rubygem-%{gem_name}
-Version: 0.0.8
+Version: 0.0.9
 Release: 1%{?dist}
 Group: Development/Libraries
 License: GPLv2
@@ -79,6 +79,9 @@ GEMFILE
 %{gem_instdir}/%{gem_name}.gemspec
 
 %changelog
+* Mon Jun 03 2013 Ivan Necas <inecas@redhat.com> 0.0.9-1
+- Include all files in the app directory, not just ruby (shk@redhat.com)
+
 * Thu May 30 2013 Ivan Necas <inecas@redhat.com> 0.0.8-1
 - fixing typo in rollback migration (lzap+git@redhat.com)
 - Fix licence to be GPLv3+ to match Foreman (dcleal@redhat.com)
