@@ -71,7 +71,7 @@ echo "updating system time"
 # update all the base packages from the updates repository
 yum -t -y -e 0 update
 
-<%= snippets "katello_registration" %>
+<%= snippets "subscription_manager_registration" %>
 
 # and add the puppet package
 yum -t -y -e 0 install puppet
