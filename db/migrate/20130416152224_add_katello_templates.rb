@@ -5,9 +5,9 @@ class AddKatelloTemplates < ActiveRecord::Migration
         :operatingsystem_ids => Redhat.all.map(&:id),
         :template            => File.read("#{ForemanKatelloEngine::Engine.root}/app/views/unattended/kickstart-katello.erb"))
     
-    ConfigTemplate.where(:name => "Subscription Manager Registration").first_or_create!(
+    ConfigTemplate.where(:name => "subscription_manager_registration").first_or_create!(
       :snippet  => true,
-      :template => File.read("#{ForemanKatelloEngine::Engine.root}/app/views/unattended/snippets/_katello_registration.erb"))
+      :template => File.read("#{ForemanKatelloEngine::Engine.root}/app/views/unattended/snippets/_subscription_manager_registration.erb"))
   rescue Exception => e
     # something bad happened, but we don't want to break the migration process
     Rails.logger.warn "Failed to migrate #{e}"
