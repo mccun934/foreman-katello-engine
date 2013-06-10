@@ -4,6 +4,7 @@ require 'mocha/setup'
 class BindingsTest < ActiveSupport::TestCase
 
   def setup
+    User.current = User.find_by_login('one')
     Setting::Auth.load_defaults
     Setting::Katello.load_defaults
   end
@@ -12,10 +13,12 @@ class BindingsTest < ActiveSupport::TestCase
     Setting::Katello['katello_url'] = 'https://example.com/katello'
     Setting::Auth['oauth_consumer_key'] = 'key'
     Setting::Auth['oauth_consumer_secret'] = 'secret'
-    config = ForemanKatelloEngine::Bindings.environment.config
+    resource = ForemanKatelloEngine::Bindings.environment
+    config = resource.config
     assert_equal 'https://example.com/katello', config[:base_url]
     assert_equal 'key', config[:oauth][:consumer_key]
     assert_equal 'secret', config[:oauth][:consumer_secret]
+    assert_equal 'one', resource.client.options[:headers]['HTTP_KATELLO_USER']
   end
 
   test 'activation keys to subscriptions mapping' do
