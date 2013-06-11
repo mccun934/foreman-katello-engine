@@ -17,15 +17,15 @@ module ForemanKatelloEngine
       end
 
       def environment
-        KatelloApi::Resources::Environment.new(client_config)
+        resource(KatelloApi::Resources::Environment)
       end
 
       def content_view
-        KatelloApi::Resources::ContentView.new(client_config)
+        resource(KatelloApi::Resources::ContentView)
       end
 
       def activation_key
-        KatelloApi::Resources::ActivationKey.new(client_config)
+        resource(KatelloApi::Resources::ActivationKey)
       end
 
       def activation_keys_to_subscriptions(org_label, env_label, content_view_label = nil)
@@ -49,6 +49,17 @@ module ForemanKatelloEngine
         else
           return nil
         end
+      end
+
+      private
+
+      # configure resource client to be used to call Katello.
+      # We need to do this for every resoruce right now.
+      # We might improve this on foreman_api side later.
+      def resource(resource_class)
+        resource = resource_class.new(client_config)
+        resource.client.options[:headers]['HTTP_KATELLO_USER'] = User.current.login
+        return resource
       end
 
     end
