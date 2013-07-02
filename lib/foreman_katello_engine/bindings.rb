@@ -9,6 +9,7 @@ module ForemanKatelloEngine
         {
           :base_url => Setting['katello_url'],
           :enable_validations => false,
+          :system => 'system_foreman',
           :oauth => {
             :consumer_key => Setting['oauth_consumer_key'],
             :consumer_secret => Setting['oauth_consumer_secret']
