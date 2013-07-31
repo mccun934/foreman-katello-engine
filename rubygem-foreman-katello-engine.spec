@@ -8,7 +8,7 @@
 
 Summary: Katello specific parts of Foreman
 Name: %{?scl_prefix}rubygem-%{gem_name}
-Version: 0.0.11
+Version: 0.0.12
 Release: 1%{?dist}
 Group: Development/Libraries
 License: GPLv2
@@ -79,6 +79,9 @@ GEMFILE
 %{gem_instdir}/%{gem_name}.gemspec
 
 %changelog
+* Wed Jul 31 2013 Partha Aji <paji@redhat.com> 0.0.12-1
+- Bumping the release for gemspec (paji@redhat.com)
+
 * Wed Jul 31 2013 Partha Aji <paji@redhat.com> 0.0.11-1
 - Setting#create! is now preferred way of creatting setting records
   (tstrachota@redhat.com)
