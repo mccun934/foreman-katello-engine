@@ -8,7 +8,7 @@
 
 Summary: Katello specific parts of Foreman
 Name: %{?scl_prefix}rubygem-%{gem_name}
-Version: 0.0.10
+Version: 0.0.11
 Release: 1%{?dist}
 Group: Development/Libraries
 License: GPLv2
@@ -79,6 +79,16 @@ GEMFILE
 %{gem_instdir}/%{gem_name}.gemspec
 
 %changelog
+* Wed Jul 31 2013 Partha Aji <paji@redhat.com> 0.0.11-1
+- Setting#create! is now preferred way of creatting setting records
+  (tstrachota@redhat.com)
+- Adds proper system identification via HTTP header (mhulan@redhat.com)
+- Merge pull request #15 from iNecas/tests-independence (inecas@redhat.com)
+- Make sure the tests are independent (inecas@redhat.com)
+- 972744 - make the API calls to Katello on behalf of the current user
+  (inecas@redhat.com)
+- BZ #970199 - fixes the name of the snippet (dmitri@appliedlogic.ca)
+
 * Mon Jun 03 2013 Ivan Necas <inecas@redhat.com> 0.0.10-1
 - Check we can release with tito before pushing into rubygems
   (inecas@redhat.com)
