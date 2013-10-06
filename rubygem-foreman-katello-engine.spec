@@ -8,7 +8,7 @@
 
 Summary: Katello specific parts of Foreman
 Name: %{?scl_prefix}rubygem-%{gem_name}
-Version: 0.0.12
+Version: 0.0.14
 Release: 1%{?dist}
 Group: Development/Libraries
 License: GPLv2
@@ -79,6 +79,13 @@ GEMFILE
 %{gem_instdir}/%{gem_name}.gemspec
 
 %changelog
+* Sun Oct 06 2013 Ivan Necas <inecas@redhat.com> 0.0.14-1
+- fixes BZ 976418: rhel-specific kickstart file uses --skip to trigger a non-
+  interactive boot (dmitri@appliedlogic.ca)
+- 1015561 - use puppetmaster to determine Pulp node (inecas@redhat.com)
+- Use rpm -ivh instead of yum install in the registration snippet to support
+  RHEL5 (shk@redhat.com)
+
 * Wed Jul 31 2013 Partha Aji <paji@redhat.com> 0.0.12-1
 - Bumping the release for gemspec (paji@redhat.com)
 
