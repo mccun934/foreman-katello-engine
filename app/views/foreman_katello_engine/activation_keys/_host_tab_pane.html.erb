@@ -62,7 +62,8 @@ $(function() {
     function ktHideParams() {
         var paramsToHide = [ktFindParamContainer(KT_AK_LABEL),
                             ktFindParamContainer('kt_org'),
-                            ktFindParamContainer('kt_env')];
+                            ktFindParamContainer('kt_env'),
+                            ktFindParamContainer('kt_cv')];
         $.each(paramsToHide, function (i, paramContainer) {
             if(paramContainer) {
                 paramContainer.hide();
@@ -75,20 +76,12 @@ $(function() {
         var selectedOption = $("#hostgroup_environment_id option[ value ='" + selectedEnvId + "' ]");
 
         var ktEnvOption, ktCvOption, ktOrgLabel, ktEnvLabel, ktCvLabel;
-        if(selectedOption.hasClass('kt-cv')) {
-            ktCvOption = selectedOption;
-            ktEnvOption = ktCvOption.prevAll('option.kt-env').first();
-        } else if(selectedOption.hasClass('kt-env')) {
-            ktEnvOption = selectedOption;
-        }
-
-        if(ktEnvOption) {
-            ktEnvLabel = ktEnvOption.text();
-            ktOrgLabel = ktEnvOption.parent().attr('label');
-        }
-
-        if(ktCvOption) {
-            ktCvLabel = ktCvOption.text();
+        var ktEnvId = selectedOption.attr('data-katello-id');
+        if(ktEnvId) {
+            var idParts = ktEnvId.split('/');
+            ktOrgLabel  = idParts[0];
+            ktEnvLabel  = idParts[1];
+            ktCvLabel   = idParts[2];
         }
         return [ktOrgLabel, ktEnvLabel, ktCvLabel];
     }

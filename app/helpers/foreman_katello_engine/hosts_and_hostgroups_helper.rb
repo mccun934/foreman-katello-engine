@@ -23,44 +23,32 @@ module ForemanKatelloEngine
       end
     end
 
-    def envs_by_kt_env(envs)
-      envs.group_by do |env|
-        env.katello_id.split('/')[1]
-      end
-    end
-
-    def envs_without_kt_org
-      envs_without_kt_org = ::Environment.all.reject(&:katello_id)
-    end
-
-    def envs_without_kt_org_options
-      options_from_collection_for_select(envs_without_kt_org,
-                                         :id,
-                                         :to_label,
-                                         (@host || @hostgroup).environment_id)
-    end
-
     def grouped_env_options
-      envs_by_org = envs_by_kt_org.reduce({}) do |hash, (org, envs)|
-        hash.update(org => envs_by_kt_env(envs))
-      end
-      grouped_options = envs_by_org.sort_by(&:first).map do |org, envs_by_env|
-        optgroup = %[<optgroup label="#{org}">]
-        opts = envs_by_env.sort_by(&:first).map do |kt_env, envs|
-          envs.sort_by(&:katello_id).map do |env|
-            selected = env.id == (@host || @hostgroup).environment_id ? "selected" : ""
-            if cv = env.katello_id.split('/')[2]
-              %[<option value="#{env.id}" class="kt-cv" #{selected}>#{cv}</option>]
-            else
-              %[<option value="#{env.id}" class="kt-env" #{selected}>#{kt_env}</option>]
-            end
-          end.join
+      grouped_options = envs_by_kt_org.sort_by(&:first).map do |kt_org_label, envs_by_org|
+        optgroup = %[<optgroup label="#{kt_org_label}">]
+        opts = envs_by_org.sort_by(&:katello_id).reduce({}) do |env_options, env|
+          selected = env.id == (@host || @hostgroup).environment_id ? "selected" : ""
+          kt_env_label = env.katello_id.split('/')[1]
+          env_options[kt_env_label] ||= selected
+          env_options
+        end.sort_by(&:first).map do |kt_env_label, selected|
+          %[<option value="#{kt_org_label}/#{kt_env_label}" class="kt-env" #{selected}>#{kt_env_label}</option>]
         end.join
         optgroup << opts
         optgroup << '</optgroup>'
       end.join
+      grouped_options.insert(0, %[<option value=""></option>])
+      grouped_options.html_safe
+    end
 
-      return grouped_options.html_safe + envs_without_kt_org_options
+    def content_view_options
+      cv_options = ::Environment.order(:katello_id).all.map do |env|
+        selected = env.id == (@host || @hostgroup).environment_id ? "selected" : ""
+        env_text = env.katello_id ? env.katello_id.split('/')[2] : env.name
+        %[<option value="#{env.id}" data-katello-id="#{env.katello_id}" #{selected}>#{env_text}</option>]
+      end.join
+
+      return cv_options.html_safe
     end
 
   end
