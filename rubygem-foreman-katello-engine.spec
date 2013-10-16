@@ -8,7 +8,7 @@
 
 Summary: Katello specific parts of Foreman
 Name: %{?scl_prefix}rubygem-%{gem_name}
-Version: 0.0.16
+Version: 0.0.17
 Release: 1%{?dist}
 Group: Development/Libraries
 License: GPLv2
@@ -79,6 +79,10 @@ GEMFILE
 %{gem_instdir}/%{gem_name}.gemspec
 
 %changelog
+* Wed Oct 16 2013 Unknown name <inecas@redhat.com> 0.0.17-1
+- 1018919 - split puppet environments into kt environment and content view
+  (inecas@redhat.com)
+
 * Fri Oct 11 2013 Partha Aji <paji@redhat.com> 0.0.16-1
 
 * Fri Oct 11 2013 Partha Aji <paji@redhat.com> 0.0.15-1
