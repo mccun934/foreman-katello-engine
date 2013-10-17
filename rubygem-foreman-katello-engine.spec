@@ -15,12 +15,23 @@ License: GPLv2
 URL: http://github.com/Katello/foreman-katello-engine
 Source0: http://rubygems.org/downloads/%{gem_name}-%{version}.gem
 Requires: foreman
-Requires: %{?scl_prefix}ruby(abi) >= %{rubyabi}
+
+%if 0%{?fedora} > 18
+Requires:       %{?scl_prefix}ruby(release)
+%else
+Requires: %{?scl_prefix}ruby(abi) = 1.9.1
+%endif
+
 Requires: %{?scl_prefix}rubygem(deface)
 Requires: %{?scl_prefix}rubygem(katello_api)
 Requires: %{?scl_prefix}rubygems
 BuildRequires: %{?scl_prefix}rubygems-devel
-BuildRequires: %{?scl_prefix}ruby(abi) >= %{rubyabi}
+
+%if 0%{?fedora} > 18
+BuildRequires:       %{?scl_prefix}ruby(release)
+%else
+BuildRequires: %{?scl_prefix}ruby(abi) = 1.9.1
+%endif
 BuildRequires: %{?scl_prefix}rubygems
 BuildArch: noarch
 Provides: %{?scl_prefix}rubygem(%{gem_name}) = %{version}
