@@ -8,7 +8,7 @@
 
 Summary: Katello specific parts of Foreman
 Name: %{?scl_prefix}rubygem-%{gem_name}
-Version: 0.0.18
+Version: 0.0.19
 Release: 1%{?dist}
 Group: Development/Libraries
 License: GPLv2
@@ -90,6 +90,9 @@ GEMFILE
 %{gem_instdir}/%{gem_name}.gemspec
 
 %changelog
+* Fri Oct 25 2013 Ivan Nečas <inecas@redhat.com> 0.0.19-1
+- 1023167 - correctly show selected environments (inecas@redhat.com)
+
 * Thu Oct 17 2013 Partha Aji <paji@redhat.com> 0.0.18-1
 - Updated code to work with f19 (paji@redhat.com)
 
