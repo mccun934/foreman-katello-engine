@@ -27,7 +27,7 @@ module ForemanKatelloEngine
       grouped_options = envs_by_kt_org.sort_by(&:first).map do |kt_org_label, envs_by_org|
         optgroup = %[<optgroup label="#{kt_org_label}">]
         opts = envs_by_org.sort_by(&:katello_id).reduce({}) do |env_options, env|
-          selected = env.id == (@host || @hostgroup).environment_id ? "selected" : ""
+          selected = env.id == (@host || @hostgroup).environment_id ? "selected" : nil
           kt_env_label = env.katello_id.split('/')[1]
           env_options[kt_env_label] ||= selected
           env_options
